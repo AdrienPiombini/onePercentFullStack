@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreateGoalDto } from '../dto/CreateGoalDto';
 import { Output, Usecase } from 'src/core/usecases/Usecase';
-import { GoalProperties } from 'src/core/domain/Goal';
+import { Goal, GoalProperties } from 'src/core/domain/Goal';
 import { v4 } from 'uuid';
 
 import { GoalRepository } from 'src/core/persistence/GoalRepository';
@@ -27,12 +27,11 @@ export class CreateGoalUsecase
       userId: request.userId,
     };
 
-    Logger.log(`Saving Goal Entity ${JSON.stringify(props)}in Db... `);
+    const entity = Goal.create(props);
 
-    const result = await this.goalRepository.save({
-      id: v4(),
-      props,
-    });
+    Logger.log(`Saving Goal Entity ${JSON.stringify(entity)}in Db... `);
+
+    const result = await this.goalRepository.save(entity);
 
     if (!result) {
       return {

@@ -1,5 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { GoalMysqlEntity } from 'src/modules/goals/db/TypeORM/Mysql/GoalMysqlEntity';
+import { GoalMysqlEntity } from 'src/modules/goals/db/Mysql/GoalMysqlEntity';
 
 export const mysqlProvider: TypeOrmModuleOptions = {
   type: 'mysql',

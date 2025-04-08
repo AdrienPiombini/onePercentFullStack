@@ -11,10 +11,11 @@ export class GoalMongoRepository implements GoalRepository {
   ) {}
 
   async save(goal: Goal): Promise<Goal> {
-    const go = new this.model({ props: goal.props });
-    const saved = await go.save();
+    // const go = new this.model({ props: goal.props });
+    const document = new this.model(goal);
+    const entity = await document.save();
     console.log('MONGOFB');
-    return saved;
+    return entity;
   }
 
   async findByUserId(userId: string): Promise<Goal[]> {
