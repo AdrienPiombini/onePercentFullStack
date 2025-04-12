@@ -1,6 +1,6 @@
 export interface Usecase<Input, Output> {
   execute(request?: Input): Promise<Output> | Output;
-  canExecute?(identity: string, request?: Input): Promise<boolean> | boolean;
+  canExecute?(request?: Input): Promise<boolean> | boolean;
 }
 
 export type Input = {

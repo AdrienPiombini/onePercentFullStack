@@ -2,7 +2,6 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { CreateGoalDto } from '../dto/CreateGoalDto';
 import { Output, Usecase } from 'src/core/usecases/Usecase';
 import { Goal, GoalProperties } from 'src/core/domain/Goal';
-import { v4 } from 'uuid';
 
 import { GoalRepository } from 'src/core/persistence/GoalRepository';
 
@@ -16,7 +15,7 @@ export class CreateGoalUsecase
   implements Usecase<CreateGoalUsecaseInput, Output>
 {
   constructor(
-    @Inject('Repository')
+    @Inject('GoalRepository')
     private readonly goalRepository: GoalRepository,
   ) {}
 

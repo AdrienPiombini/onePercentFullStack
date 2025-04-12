@@ -19,7 +19,7 @@ import { GoalMongoRepository } from './db/MongoDb/GoalMongoRepository';
     CreateGoalUsecase,
     GetAllGoalsUsecase,
     {
-      provide: 'Repository',
+      provide: 'GoalRepository',
       useClass: GoalMongoRepository,
     },
   ],

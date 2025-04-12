@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MongooseModule } from '@nestjs/mongoose';
 import { mysqlProvider } from './db/mysql.provider';
 import { ConfigModule } from '@nestjs/config';
+import { UserModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     GoalModule,
     TaskModule,
+    UserModule,
     TypeOrmModule.forRoot(mysqlProvider),
     // MongooseModule.forRootAsync(mongoDbProviderAsync),
 

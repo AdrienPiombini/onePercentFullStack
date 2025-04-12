@@ -25,7 +25,6 @@ export class Goal implements BaseEntity<GoalProperties> {
     public readonly createdAt?: Date,
     public readonly updatedAt?: Date,
   ) {}
-
   static create(props: GoalProperties): Goal {
     return new Goal(v4(), props, new Date(), new Date());
   }

@@ -11,7 +11,7 @@ type GoalDto = {
 
 export class GetAllGoalsUsecase implements Usecase<string, GoalDto[]> {
   constructor(
-    @Inject('Repository')
+    @Inject('GoalRepository')
     private readonly goalRepository: GoalRepository,
   ) {}
 
