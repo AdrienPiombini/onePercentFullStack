@@ -19,7 +19,7 @@ export class UserMongoRepository implements UserRepository {
   async findByIdentity(identity: Identity): Promise<User | null> {
     const result = await this.model
       .findOne({
-        'props.identity.username': identity.fullName,
+        'props.identity.fullName': identity.fullName,
       })
       .exec();
 

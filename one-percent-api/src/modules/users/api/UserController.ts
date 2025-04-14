@@ -1,21 +1,26 @@
-import { Body, Controller, Post } from '@nestjs/common';
 import {
-  RegisterUseCase,
-  RegisterUserInput,
-} from '../usecases/RegisterUsecase';
+  Body,
+  Controller,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { RegisterUseCase } from '../usecases/RegisterUsecase';
+import { RegisterUserDto } from '../dto/IdentityDto';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly registerUsecase: RegisterUseCase) {}
 
+  @UsePipes(ValidationPipe)
   @Post('/register')
-  async register(@Body() data: RegisterUserInput): Promise<any> {
+  async register(@Body() data: RegisterUserDto): Promise<any> {
     const canExecute = await this.registerUsecase.canExecute(data);
 
     if (!canExecute) {
-      return 401;
+      return 400;
     }
 
-    return this.registerUsecase.execute(data);
+    await this.registerUsecase.execute(data);
   }
 }

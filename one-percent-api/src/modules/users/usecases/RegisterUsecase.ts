@@ -1,53 +1,46 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Identity, User, UserProperties } from 'src/core/domain/User';
+import { User, UserProperties } from 'src/core/domain/User';
 import { UserRepository } from 'src/core/persistence/IndentityRepository';
 import { Usecase } from 'src/core/usecases/Usecase';
 import { v4 } from 'uuid';
-
-export type RegisterUserInput = {
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
-};
+import { RegisterUserDto } from '../dto/IdentityDto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class RegisterUseCase implements Usecase<RegisterUserInput, void> {
+export class RegisterUseCase implements Usecase<RegisterUserDto, void> {
   constructor(
     @Inject('UserRepository')
     private readonly userRepository: UserRepository,
   ) {}
 
-  async execute(request: RegisterUserInput): Promise<void> {
-    const identity = this.buildIdentity(request.firstname, request.lastname);
+  async execute(request: RegisterUserDto): Promise<void> {
+    const { firstname, lastname, password, email } = request;
+
+    const identity = User.buildIdentity(firstname, lastname);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const props: UserProperties = {
       id: v4(),
-      ...request,
+      firstname,
+      lastname,
+      password: hashedPassword,
+      email,
       identity,
     };
     const user = User.create(props);
     await this.userRepository.save(user);
   }
 
-  async canExecute(request: RegisterUserInput): Promise<boolean> {
+  async canExecute(request: RegisterUserDto): Promise<boolean> {
     const validation = User.validate(request);
     if (!validation) {
       return false;
     }
 
-    const identity = this.buildIdentity(request.firstname, request.lastname);
-    const result = await this.userRepository.findByIdentity(identity);
-    if (result) {
-      return false;
-    }
-    return true;
-  }
+    const identity = User.buildIdentity(request.firstname, request.lastname);
+    const existedUser = await this.userRepository.findByIdentity(identity);
 
-  private buildIdentity(firstname: string, lastname: string): Identity {
-    const fullName = firstname + lastname;
-    console.log(fullName);
-    return {
-      fullName,
-    };
+    return existedUser ? false : true;
   }
 }

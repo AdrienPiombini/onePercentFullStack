@@ -38,16 +38,14 @@ export class User implements BaseEntity<UserProperties> {
     return true;
   }
 
-  static generateUniqueId(name: string): string {
-    return name;
+  static buildIdentity(firstname: string, lastname: string): Identity {
+    const fullName = firstname + lastname;
+    return {
+      fullName,
+    };
   }
 
-  static restore(user: User): User {
-    return {
-      id: user.id,
-      props: user.props,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+  static restore({ id, props, createdAt, updatedAt }: User): User {
+    return { id, props, createdAt, updatedAt };
   }
 }
